@@ -12,7 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-
+// to use the program you have to change path in the hibernate.cfg.xml and create db in mysql
 public class Main {
 	
 	public static void addBook(Session session){
