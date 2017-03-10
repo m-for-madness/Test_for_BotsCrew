@@ -53,7 +53,6 @@ public class Book implements Comparable<Book>{
 	@Override
 	public String toString() {
 		return author.getName() +"  "+ title;
-		//return title;
 	}
 
 	@Override

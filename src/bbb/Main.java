@@ -16,14 +16,20 @@ import org.hibernate.criterion.Restrictions;
 public class Main {
 	
 	public static void addBook(Session session){
-	
-		System.out.print("If you want to add book input title: ");
+		String title="";
 		Scanner sc =  new Scanner(System.in);
-		String title = sc.nextLine();
+	do{
+		System.out.print("Input title: ");
+		title = sc.nextLine();
+		if(title.length()==0)System.out.println("Title must have 1 or more symbol,plz try again");
+	}while(title.length()==0);
 		Book book = new Book(title);
-		System.out.print("Also add author: ");
-		
-		String name = sc.nextLine();
+		String name="";
+		do{
+		System.out.print("Input author: ");
+		name = sc.nextLine();
+		if(name.length()==0)System.out.println("Name must have 1 or more symbol,plz try again");
+		}while(name.length()==0);
 		Author author = new Author(name);
 		author.setBook(book);
 		book.setAuthor(author);
@@ -31,6 +37,11 @@ public class Main {
 		
 	}
 	
+
+	//firstly i find in db quantity of books with such titles
+	// if quantity = 0 message that there aren't such book
+	// quantity = 1 - delete
+	// quantity more than 1 - sort by numbers and choose which one delete
 	public static void removeBook(Session session){
 		System.out.println("Type title of the book which you want to remove");
 		Scanner sc = new Scanner(System.in);
@@ -46,23 +57,40 @@ public class Main {
 		if(books.size()==1){
 			session.delete(books.get(0));
 		}
+		else if(books.size()==0){
+			System.out.println("There isn't such book in db");
+		}
 		else{
 			System.out.println("There is several books with such titles, input number of exact books: ");
 			for (Book book : books) {
 				System.out.println(i+". " + book.getTitle());
 				i++;
 			}
+			boolean b = true;
+			do{
+			try{
 			int choice = sc.nextInt();
 			session.delete(books.get(choice-1));
+			}catch(Exception e){
+				System.out.println("You have input incorrect value");
+				b=false;
+			}
+			}
+			while(b==false);
 		}
 	}
 	
+
+	//firstly i find in db quantity of books with such titles
+	// if quantity = 0 message that there aren't such book
+	// quantity = 1 - edit
+	// quantity more than 1 - sort by numbers and choose which one edit
 	public static void editBook(Session session){
 		System.out.println("Type title of the book which you want to edit");
 		Scanner sc = new Scanner(System.in);
 		Scanner sc2 = new Scanner(System.in);
 		String s = sc.nextLine();
-		System.out.println(s);
+		
 		List<Book>books = new ArrayList<Book>();
 		for (Book book : (List<Book>)session.createQuery("from Book").list()) {
 			if(book.getTitle().equalsIgnoreCase(s)){
@@ -71,8 +99,12 @@ public class Main {
 		}
 		int i =1;
 		if(books.size()==1){
+			String new_title="";
+			do{
 			System.out.println("Type new title for this book");
-			String new_title = sc.nextLine();
+			new_title = sc.nextLine();
+			if(new_title.length()==0)System.out.println("Title must have 1 or more symbol,plz try again");
+			}while(new_title.length()==0);
 			books.get(0).setTitle(new_title);
 			session.update(books.get(0));
 		}
@@ -85,10 +117,23 @@ public class Main {
 				System.out.println(i+". " + book.getTitle());
 				i++;
 			}
-			int choice = sc.nextInt();
+			boolean b = true;
+			int choice=0;
+			do{
+			try{
+			choice = sc.nextInt();
+			}catch(Exception e){
+				System.out.println("You have input incorrect value");
+				b=false;
+			}
+			}
+			while(b==false);
+			String new_title="";
+			do{
 			System.out.println("Type new title for this book");
-			String new_title = sc2.nextLine();
-			System.out.println(new_title);
+			new_title = sc2.nextLine();
+			if(new_title.length()==0)System.out.println("Title must have 1 or more symbol,plz try again");
+			}while(new_title.length()==0);
 			books.get(choice-1).setTitle(new_title);
 			session.update(books.get(choice-1));
 		}
