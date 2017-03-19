@@ -9,7 +9,7 @@
 		<!-- Assume test is the database name -->
 		<property name="hibernate.connection.url">jdbc:mysql://localhost/test_for_botscrew</property>
 		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">12961996m</property>
+		<property name="hibernate.connection.password">1111</property>
 		<property name="hibernate.show_sql">false</property>
 		
 		<property name="hibernate.hbm2ddl.auto">update</property>
